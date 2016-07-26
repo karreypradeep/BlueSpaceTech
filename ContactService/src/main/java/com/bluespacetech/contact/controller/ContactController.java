@@ -10,6 +10,8 @@ package com.bluespacetech.contact.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bluespacetech.contact.entity.Contact;
 import com.bluespacetech.contact.service.ContactService;
-import com.bluespacetech.core.controller.AbstractBaseController;
 import com.bluespacetech.core.exceptions.BusinessException;
 
 /**
  * @author pradeep created date 30-Jan-2015
  */
 @RestController
-@RequestMapping("/contactservice/contacts")
-public class ContactController extends AbstractBaseController {
+@RequestMapping("/contacts")
+public class ContactController  {
 
     @Autowired
     ContactService contactService;
@@ -43,6 +44,8 @@ public class ContactController extends AbstractBaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Contact>> getContacts() {
+	ParameterizedTypeReference<Resources<Contact>> ptr = new ParameterizedTypeReference<Resources<Contact>>() {
+	};
 	final List<Contact> contacts = contactService.findAll();
 	return new ResponseEntity<List<Contact>>(
 		contacts, HttpStatus.OK);

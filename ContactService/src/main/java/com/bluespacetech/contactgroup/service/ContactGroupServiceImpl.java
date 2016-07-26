@@ -10,7 +10,6 @@ package com.bluespacetech.contactgroup.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.bluespacetech.contactgroup.entity.ContactGroup;
@@ -40,7 +39,7 @@ public class ContactGroupServiceImpl implements ContactGroupService {
     }
 
     @Override
-    @PreAuthorize("hasAuthority('ACC_TYPE_SUPER_ADMIN')  or ((hasAuthority('ACC_TYPE_ADMIN') or hasAuthority('ACC_TYPE_EMPLOYEE')) and (hasAuthority('CREATE_PERSON') ))")
+    //@PreAuthorize("hasAuthority('ACC_TYPE_SUPER_ADMIN')  or ((hasAuthority('ACC_TYPE_ADMIN') or hasAuthority('ACC_TYPE_EMPLOYEE')) and (hasAuthority('CREATE_PERSON') ))")
     public ContactGroup createContactGroup(final ContactGroup contactGroup) throws BusinessException {
 	ContactGroupServiceImpl.validateContactGroup(contactGroup);
 	final ContactGroup newContactGroup = contactGroupRepository.save(contactGroup);

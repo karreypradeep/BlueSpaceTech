@@ -23,15 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bluespacetech.contactgroup.entity.ContactGroup;
 import com.bluespacetech.contactgroup.service.ContactGroupService;
-import com.bluespacetech.core.controller.AbstractBaseController;
 import com.bluespacetech.core.exceptions.BusinessException;
 
 /**
  * @author pradeep created date 30-Jan-2015
  */
 @RestController
-@RequestMapping("/contactservice/contactgroups")
-public class ContactGroupController extends AbstractBaseController {
+@RequestMapping("/contactgroups")
+public class ContactGroupController {
 
     @Autowired
     ContactGroupService contactgroupService;
