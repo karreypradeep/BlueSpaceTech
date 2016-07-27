@@ -10,8 +10,6 @@ package com.bluespacetech.contact.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bluespacetech.contact.entity.Contact;
+import com.bluespacetech.contact.resources.ContactResource;
+import com.bluespacetech.contact.resources.assembler.ContactResourceAssembler;
 import com.bluespacetech.contact.service.ContactService;
 import com.bluespacetech.core.exceptions.BusinessException;
 
@@ -32,7 +32,7 @@ import com.bluespacetech.core.exceptions.BusinessException;
  */
 @RestController
 @RequestMapping("/contacts")
-public class ContactController  {
+public class ContactController {
 
     @Autowired
     ContactService contactService;
@@ -43,12 +43,10 @@ public class ContactController  {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Contact>> getContacts() {
-	ParameterizedTypeReference<Resources<Contact>> ptr = new ParameterizedTypeReference<Resources<Contact>>() {
-	};
+    public ResponseEntity<List<ContactResource>> getContacts() {
 	final List<Contact> contacts = contactService.findAll();
-	return new ResponseEntity<List<Contact>>(
-		contacts, HttpStatus.OK);
+	final List<ContactResource> contactResources = new ContactResourceAssembler().toResources(contacts);
+	return new ResponseEntity<List<ContactResource>>(contactResources, HttpStatus.OK);
     }
 
     /**
@@ -59,42 +57,32 @@ public class ContactController  {
      * @return
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Contact> getContactById(
-	    @PathVariable final Long id) throws BusinessException{
-	final Contact contact = contactService
-		.getContactById(id);
+    public ResponseEntity<Contact> getContactById(@PathVariable final Long id) throws BusinessException {
+	final Contact contact = contactService.getContactById(id);
 	if (contact == null) {
-	    throw new BusinessException(
-		    "Supplied Contact ID is invalid.");
+	    throw new BusinessException("Supplied Contact ID is invalid.");
 	}
-	return new ResponseEntity<Contact>(contact,
-		HttpStatus.OK);
+	return new ResponseEntity<Contact>(contact, HttpStatus.OK);
 
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> create(
-	    @RequestBody final Contact contact)
-		    throws BusinessException {
+    public ResponseEntity<Void> create(@RequestBody final Contact contact) throws BusinessException {
 	contactService.createContact(contact);
 	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@PathVariable final Long id,
-	    @RequestBody final Contact contactResource)
-		    throws BusinessException {
+    public ResponseEntity<Void> update(@PathVariable final Long id, @RequestBody final Contact contactResource)
+	    throws BusinessException {
 
 	// Get existing Financial Year
-	final Contact currentContact = contactService
-		.getContactById(id);
+	final Contact currentContact = contactService.getContactById(id);
 	if (currentContact == null) {
-	    throw new BusinessException(
-		    "Supplied Contact does not exist.");
+	    throw new BusinessException("Supplied Contact does not exist.");
 	}
-	if (!currentContact.getVersion().equals(
-		contactResource.getVersion())) {
+	if (!currentContact.getVersion().equals(contactResource.getVersion())) {
 	    throw new BusinessException("Stale Contact. Please update.");
 	}
 
@@ -110,9 +98,7 @@ public class ContactController  {
     }
 
     @ExceptionHandler(BusinessException.class)
-    ResponseEntity<String> handleContactNotFoundException(
-	    final Exception e) {
-	return new ResponseEntity<String>(String.format("{\"reason\":\"%s\"}",
-		e.getMessage()), HttpStatus.NOT_FOUND);
+    ResponseEntity<String> handleContactNotFoundException(final Exception e) {
+	return new ResponseEntity<String>(String.format("{\"reason\":\"%s\"}", e.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
