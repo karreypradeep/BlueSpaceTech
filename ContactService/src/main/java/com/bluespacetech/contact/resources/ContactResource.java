@@ -9,6 +9,8 @@ package com.bluespacetech.contact.resources;
 
 import org.springframework.hateoas.ResourceSupport;
 
+import com.bluespacetech.contactgroup.entity.ContactGroup;
+
 /**
  * @author pradeep created date 30-Jan-2015
  */
@@ -23,8 +25,18 @@ public class ContactResource extends ResourceSupport {
     private String				lastName;
 
     private String				email;
+    
+    private ContactGroup contactGroup;
+    
+    public ContactGroup getContactGroup() {
+		return contactGroup;
+	}
 
-    /**
+	public void setContactGroup(ContactGroup contactGroup) {
+		this.contactGroup = contactGroup;
+	}
+
+	/**
      * @return the objectId
      */
     public Long getObjectId() {

@@ -40,6 +40,7 @@ ResourceAssemblerSupport<Contact, ContactResource> {
 	contactResource.setFirstName(contact.getFirstName());
 	contactResource.setLastName(contact.getLastName());
 	contactResource.setEmail(contact.getEmail());
+	contactResource.setContactGroup(contact.getContactGroup());
 	final Link link = linkTo(ContactController.class).slash(
 		contact.getId()).withSelfRel();
 	contactResource.add(link.withSelfRel());
@@ -61,6 +62,7 @@ ResourceAssemblerSupport<Contact, ContactResource> {
 	destinationContact.setFirstName(sourceContact.getFirstName());
 	destinationContact.setLastName(sourceContact.getLastName());
 	destinationContact.setEmail(sourceContact.getEmail());
+	destinationContact.setContactGroup(sourceContact.getContactGroup());
     }
 
     /**
@@ -75,6 +77,7 @@ ResourceAssemblerSupport<Contact, ContactResource> {
 	destinationContact.setFirstName(contactResource.getFirstName());
 	destinationContact.setLastName(contactResource.getLastName());
 	destinationContact.setEmail(contactResource.getEmail());
+	destinationContact.setContactGroup(contactResource.getContactGroup());
 	return destinationContact;
     }
 

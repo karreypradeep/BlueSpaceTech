@@ -7,10 +7,13 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.bluespacetech.contactgroup.entity.ContactGroup;
 import com.bluespacetech.core.model.BaseEntity;
 
 /**
@@ -36,8 +39,20 @@ public class Contact extends BaseEntity implements Serializable {
     @NotEmpty(message = "Email is mandatory.")
     @Column(name = "EMAIL")
     private String				email;
+    
+    @ManyToOne
+    @JoinColumn(name="CONTACT_GROUP_ID", nullable = false)
+    private ContactGroup contactGroup;
+    
+    public ContactGroup getContactGroup() {
+		return contactGroup;
+	}
 
-    /**
+	public void setContactGroup(ContactGroup contactGroup) {
+		this.contactGroup = contactGroup;
+	}
+
+	/**
      * @return the firstName
      */
     public String getFirstName() {
