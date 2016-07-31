@@ -86,7 +86,7 @@ public class ContactController {
 	    throw new BusinessException("Stale Contact. Please update.");
 	}
 
-	contactService.updateContact(currentContact);
+	contactService.updateContact(contactResource);
 	return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
