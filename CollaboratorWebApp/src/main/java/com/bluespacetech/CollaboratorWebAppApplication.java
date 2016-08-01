@@ -1,8 +1,6 @@
 package com.bluespacetech;
 
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -11,9 +9,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,13 +38,12 @@ class ContactApiGatewayRestController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @RequestMapping("/emails")
-    public Collection<String> getContactEmails() {
-	ParameterizedTypeReference<Resources<Contact>> ptr = new ParameterizedTypeReference<Resources<Contact>>() {
-	};
-	ResponseEntity<Resources<Contact>> responseEntity = this.restTemplate.exchange("http://contactservice/contacts",
-		HttpMethod.GET, null, ptr);
-	return responseEntity.getBody().getContent().stream().map(Contact::getEmail).collect(Collectors.toList());
+    @RequestMapping("")
+    public ResponseEntity<Contact[]>  getContactEmails() {
+	Contact[] contacts  = restTemplate.getForObject("http://contactservice/contacts", Contact[].class);
+	System.out.println(contacts.length);
+	return new ResponseEntity<Contact[]>(contacts, HttpStatus.OK);
+	//return responseEntity.getBody().getContent().stream().map(Contact::getEmail).collect(Collectors.toList());
     }
 }
 
