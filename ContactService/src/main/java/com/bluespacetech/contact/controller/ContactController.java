@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bluespacetech.contact.entity.Contact;
-import com.bluespacetech.contact.resources.ContactResource;
-import com.bluespacetech.contact.resources.assembler.ContactResourceAssembler;
 import com.bluespacetech.contact.service.ContactService;
 import com.bluespacetech.core.exceptions.BusinessException;
 
@@ -45,10 +43,10 @@ public class ContactController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ContactResource>> getContacts() {
+    public ResponseEntity<List<Contact>> getContacts() {
 	final List<Contact> contacts = contactService.findAll();
-	final List<ContactResource> contactResources = new ContactResourceAssembler().toResources(contacts);
-	return new ResponseEntity<List<ContactResource>>(contactResources, HttpStatus.OK);
+	//final List<ContactResource> contactResources = new ContactResourceAssembler().toResources(contacts);
+	return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
     }
 
     /**
