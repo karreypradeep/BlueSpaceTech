@@ -9,7 +9,7 @@ package com.bluespacetech.contact.resources;
 
 import org.springframework.hateoas.ResourceSupport;
 
-import com.bluespacetech.contactgroup.entity.ContactGroup;
+import com.bluespacetech.group.entity.Group;
 
 /**
  * @author pradeep created date 30-Jan-2015
@@ -26,14 +26,14 @@ public class ContactResource extends ResourceSupport {
 
     private String				email;
     
-    private ContactGroup contactGroup;
+    private Group group;
     
-    public ContactGroup getContactGroup() {
-		return contactGroup;
+    public Group getGroup() {
+		return group;
 	}
 
-	public void setContactGroup(ContactGroup contactGroup) {
-		this.contactGroup = contactGroup;
+	public void setContactGroup(Group group) {
+		this.group = group;
 	}
 
 	/**
