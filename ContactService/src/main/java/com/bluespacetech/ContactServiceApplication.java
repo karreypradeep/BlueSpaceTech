@@ -8,7 +8,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 public class ContactServiceApplication {
 
-    public static void main(final String[] args) {
-	SpringApplication.run(ContactServiceApplication.class, args);
-    }
+	public static void main(final String[] args) {
+		SpringApplication.run(ContactServiceApplication.class, args);
+	}
+	
 }
