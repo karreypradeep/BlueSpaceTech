@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.bluespacetech.contactgroup.ContactGroup;
 import com.bluespacetech.core.model.BaseEntity;
+import com.bluespacetech.group.entity.Group;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -39,8 +40,19 @@ public class Contact extends BaseEntity implements Serializable {
 	private String email;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "contactGroupPK.contact", cascade =  CascadeType.ALL)
+	@OneToMany(mappedBy = "contactGroupPK.contact", cascade = CascadeType.ALL)
 	private Collection<ContactGroup> contactGroups = new ArrayList<>();
+
+	public Collection<Group> getGroups() {
+		Collection<Group> groups = null;
+		if (contactGroups.size() > 0) {
+			groups = new ArrayList<>();
+			for (ContactGroup contactGroup : contactGroups) {
+				groups.add(contactGroup.getGroup());
+			}
+		}
+		return groups;
+	}
 
 	public Collection<ContactGroup> getContactGroups() {
 		return contactGroups;

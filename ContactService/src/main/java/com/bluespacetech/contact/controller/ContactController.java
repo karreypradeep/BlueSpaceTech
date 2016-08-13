@@ -34,71 +34,70 @@ import com.bluespacetech.core.exceptions.BusinessException;
 @CrossOrigin
 public class ContactController {
 
-    @Autowired
-    ContactService contactService;
+	@Autowired
+	ContactService contactService;
 
-    /**
-     * Retrieve All Financial Years.
-     *
-     * @return
-     */
-    @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Contact>> getContacts() {
-	final List<Contact> contacts = contactService.findAll();
-	//final List<ContactResource> contactResources = new ContactResourceAssembler().toResources(contacts);
-	return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
-    }
-
-    /**
-     * Retrieve Financial year by Id.
-     *
-     * @param id
-     *            id of Financial year to be retrieved.
-     * @return
-     */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Contact> getContactById(@PathVariable final Long id) throws BusinessException {
-	final Contact contact = contactService.getContactById(id);
-	if (contact == null) {
-	    throw new BusinessException("Supplied Contact ID is invalid.");
-	}
-	return new ResponseEntity<Contact>(contact, HttpStatus.OK);
-
-    }
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> create(@RequestBody final Contact contact) throws BusinessException {
-	contactService.createContact(contact);
-	return new ResponseEntity<Void>(HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> update(@PathVariable final Long id, @RequestBody final Contact contactResource)
-	    throws BusinessException {
-
-	// Get existing Financial Year
-	final Contact currentContact = contactService.getContactById(id);
-	if (currentContact == null) {
-	    throw new BusinessException("Supplied Contact does not exist.");
-	}
-	if (!currentContact.getVersion().equals(contactResource.getVersion())) {
-	    throw new BusinessException("Stale Contact. Please update.");
+	/**
+	 * Retrieve All Financial Years.
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Contact>> getContacts() {
+		final List<Contact> contacts = contactService.findAll();
+		return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
 	}
 
-	contactService.updateContact(contactResource);
-	return new ResponseEntity<Void>(HttpStatus.OK);
-    }
+	/**
+	 * Retrieve Financial year by Id.
+	 *
+	 * @param id
+	 *            id of Financial year to be retrieved.
+	 * @return
+	 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Contact> getContactById(@PathVariable final Long id) throws BusinessException {
+		final Contact contact = contactService.getContactById(id);
+		if (contact == null) {
+			throw new BusinessException("Supplied Contact ID is invalid.");
+		}
+		return new ResponseEntity<Contact>(contact, HttpStatus.OK);
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable final Long id) throws BusinessException {
-	contactService.deleteContact(id);
-	return new ResponseEntity<Void>(HttpStatus.OK);
-    }
+	}
 
-    @ExceptionHandler(BusinessException.class)
-    ResponseEntity<String> handleContactNotFoundException(final Exception e) {
-	return new ResponseEntity<String>(String.format("{\"reason\":\"%s\"}", e.getMessage()), HttpStatus.NOT_FOUND);
-    }
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> create(@RequestBody final Contact contact) throws BusinessException {
+		contactService.createContact(contact);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> update(@PathVariable final Long id, @RequestBody final Contact contactResource)
+			throws BusinessException {
+
+		// Get existing Financial Year
+		final Contact currentContact = contactService.getContactById(id);
+		if (currentContact == null) {
+			throw new BusinessException("Supplied Contact does not exist.");
+		}
+		if (!currentContact.getVersion().equals(contactResource.getVersion())) {
+			throw new BusinessException("Stale Contact. Please update.");
+		}
+
+		contactService.updateContact(contactResource);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable final Long id) throws BusinessException {
+		contactService.deleteContact(id);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@ExceptionHandler(BusinessException.class)
+	ResponseEntity<String> handleContactNotFoundException(final Exception e) {
+		return new ResponseEntity<String>(String.format("{\"reason\":\"%s\"}", e.getMessage()), HttpStatus.NOT_FOUND);
+	}
 }
