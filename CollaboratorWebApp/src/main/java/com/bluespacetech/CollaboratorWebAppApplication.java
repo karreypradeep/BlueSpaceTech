@@ -43,7 +43,6 @@ class ContactApiGatewayRestController {
 	Contact[] contacts  = restTemplate.getForObject("http://contactservice/contacts", Contact[].class);
 	System.out.println(contacts.length);
 	return new ResponseEntity<Contact[]>(contacts, HttpStatus.OK);
-	//return responseEntity.getBody().getContent().stream().map(Contact::getEmail).collect(Collectors.toList());
     }
 }
 
