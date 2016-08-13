@@ -54,6 +54,19 @@ public class Contact extends BaseEntity implements Serializable {
 		return groups;
 	}
 
+	public String getGroupNames() {
+		StringBuffer groupNames = null;
+		Collection<Group> groups = getGroups();
+		if (groups != null)
+			groupNames = new StringBuffer();
+		for (Group group : groups) {
+			if (groupNames.length() > 0)
+				groupNames.append(", ");
+			groupNames.append(group.getName());
+		}
+		return groupNames.toString();
+	}
+
 	public Collection<ContactGroup> getContactGroups() {
 		return contactGroups;
 	}
