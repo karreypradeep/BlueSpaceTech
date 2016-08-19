@@ -30,7 +30,7 @@ import com.bluespacetech.group.service.GroupService;
  * @author pradeep created date 30-Jan-2015
  */
 @RestController
-@RequestMapping("/Groups")
+@RequestMapping("/groups")
 @CrossOrigin
 public class GroupController {
 

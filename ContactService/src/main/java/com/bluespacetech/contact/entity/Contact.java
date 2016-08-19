@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -39,19 +40,27 @@ public class Contact extends BaseEntity implements Serializable {
 	@Column(name = "EMAIL")
 	private String email;
 
+	@Transient
+	private Collection<Group> groups;
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "contactGroupPK.contact", cascade = CascadeType.ALL)
 	private Collection<ContactGroup> contactGroups = new ArrayList<>();
 
 	public Collection<Group> getGroups() {
-		Collection<Group> groups = null;
-		if (contactGroups.size() > 0) {
-			groups = new ArrayList<>();
-			for (ContactGroup contactGroup : contactGroups) {
-				groups.add(contactGroup.getGroup());
+		if (groups == null) {
+			if (contactGroups.size() > 0) {
+				groups = new ArrayList<>();
+				for (ContactGroup contactGroup : contactGroups) {
+					groups.add(contactGroup.getGroup());
+				}
 			}
 		}
 		return groups;
+	}
+
+	public void setGroups(Collection<Group> groups) {
+		this.groups = groups;
 	}
 
 	public String getGroupNames() {
