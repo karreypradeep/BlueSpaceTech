@@ -29,9 +29,20 @@ public class Group extends BaseEntity implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 
+	@Column(name = "COMMENT")
+	private String comments;
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "contactGroupPK.group", cascade = CascadeType.ALL)
 	private Collection<ContactGroup> contactGroups = new ArrayList<>();
+
+	public String getCommenst() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
 
 	public Collection<ContactGroup> getContactGroups() {
 		return contactGroups;
@@ -41,26 +52,14 @@ public class Group extends BaseEntity implements Serializable {
 		this.contactGroups = contactGroups;
 	}
 
-	/**
-	 * @return the name
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @param name
-	 *            the name to set
-	 */
 	public void setName(final String name) {
 		this.name = name;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "Group [name=" + name + "]";

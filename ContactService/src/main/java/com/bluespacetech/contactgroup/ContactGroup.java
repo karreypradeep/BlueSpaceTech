@@ -17,6 +17,7 @@ public class ContactGroup implements Serializable {
 
 	private static final long serialVersionUID = 8104121333570891530L;
 
+	@EmbeddedId
 	private ContactGroupPK contactGroupPK = new ContactGroupPK();
 
 	@Column(name = "IS_ACTIVE")
@@ -25,7 +26,6 @@ public class ContactGroup implements Serializable {
 	@Column(name = "UNSUBSCRIBED")
 	private boolean unSubscribed = false;
 	
-	@EmbeddedId
 	public ContactGroupPK getContactGroupPK() {
 		return contactGroupPK;
 	}
@@ -66,6 +66,25 @@ public class ContactGroup implements Serializable {
 
 	public void setGroup(Group group) {
 		this.getContactGroupPK().setGroup(group);
+	}
+	
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		ContactGroup that = (ContactGroup) o;
+
+		if (getContactGroupPK() != null ? !getContactGroupPK().equals(that.getContactGroupPK())
+				: that.getContactGroupPK() != null)
+			return false;
+
+		return true;
+	}
+
+	public int hashCode() {
+		return (getContactGroupPK() != null ? getContactGroupPK().hashCode() : 0);
 	}
 
 }

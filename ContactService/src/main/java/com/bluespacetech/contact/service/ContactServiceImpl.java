@@ -7,7 +7,6 @@
  */
 package com.bluespacetech.contact.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.bluespacetech.contact.entity.Contact;
 import com.bluespacetech.contact.repository.ContactRepository;
-import com.bluespacetech.contactgroup.ContactGroup;
 import com.bluespacetech.core.exceptions.BusinessException;
-import com.bluespacetech.group.entity.Group;
 
 /**
  * class for ContactService
@@ -46,13 +43,6 @@ public class ContactServiceImpl implements ContactService {
 	// and (hasAuthority('CREATE_PERSON') ))")
 	public Contact createContact(final Contact contact) throws BusinessException {
 		ContactServiceImpl.validateContact(contact);
-		ArrayList<Group> groups = new ArrayList<>(contact.getGroups());
-		for (Group group : groups) {
-			ContactGroup contactGroup = new ContactGroup();
-			contactGroup.setContact(contact);
-			contactGroup.setGroup(group);
-			contact.getContactGroups().add(contactGroup);
-		}
 		final Contact newContact = contactRepository.save(contact);
 		return newContact;
 	}

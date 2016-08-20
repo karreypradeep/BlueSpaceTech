@@ -15,12 +15,14 @@ public class ContactGroupPK implements Serializable {
 
 	private static final long serialVersionUID = 5141112485683480973L;
 
-	private Contact contact;
-
-	private Group group;
-
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "CONTACT_ID")
+	private Contact contact;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "GROUP_ID")
+	private Group group;
+
 	public Contact getContact() {
 		return contact;
 	}
@@ -29,8 +31,6 @@ public class ContactGroupPK implements Serializable {
 		this.contact = contact;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "GROUP_ID")
 	public Group getGroup() {
 		return group;
 	}
@@ -69,5 +69,5 @@ public class ContactGroupPK implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 }
