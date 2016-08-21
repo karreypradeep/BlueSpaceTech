@@ -1,14 +1,10 @@
 /**
- * This document is a part of the source code and related artifacts for
- * bluespacetech.
- * www.bluespacetech.com
+ * This document is a part of the source code and related artifacts for bluespacetech. www.bluespacetech.com
  * Copyright © 2015 bluespacetech
- *
  */
 package com.bluespacetech.contact.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bluespacetech.contact.entity.Contact;
 import com.bluespacetech.contact.service.ContactService;
-import com.bluespacetech.contactgroup.ContactGroup;
 import com.bluespacetech.core.exceptions.BusinessException;
-import com.bluespacetech.group.entity.Group;
 
 /**
  * @author pradeep created date 30-Jan-2015
@@ -46,9 +40,9 @@ public class ContactController {
 	 * @return
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Contact>> getContacts() {
-		final List<Contact> contacts = contactService.findAll();
-		return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
+	public ResponseEntity<Collection<Contact>> getContacts() {
+		final Collection<Contact> contacts = contactService.findAll();
+		return new ResponseEntity<Collection<Contact>>(contacts, HttpStatus.OK);
 	}
 
 	/**
@@ -71,13 +65,6 @@ public class ContactController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> create(@RequestBody final Contact contact) throws BusinessException {
-		ArrayList<Group> groups = new ArrayList<>(contact.getGroups());
-		for (Group group : groups) {
-			ContactGroup contactGroup = new ContactGroup();
-			contactGroup.setContact(contact);
-			contactGroup.setGroup(group);
-			contact.getContactGroups().add(contactGroup);
-		}
 		contactService.createContact(contact);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -95,14 +82,6 @@ public class ContactController {
 			throw new BusinessException("Stale Contact. Please update.");
 		}
 		
-		ArrayList<Group> groups = new ArrayList<>(contact.getGroups());
-		for (Group group : groups) {
-			ContactGroup contactGroup = new ContactGroup();
-			contactGroup.setContact(contact);
-			contactGroup.setGroup(group);
-			contact.getContactGroups().add(contactGroup);
-		}
-
 		contactService.updateContact(contact);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}

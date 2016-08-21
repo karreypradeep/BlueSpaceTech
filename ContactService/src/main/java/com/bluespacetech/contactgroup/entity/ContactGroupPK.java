@@ -1,4 +1,4 @@
-package com.bluespacetech.contactgroup;
+package com.bluespacetech.contactgroup.entity;
 
 import java.io.Serializable;
 

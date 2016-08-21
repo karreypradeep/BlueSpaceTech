@@ -1,4 +1,4 @@
-package com.bluespacetech.contactgroup;
+package com.bluespacetech.contactgroup.entity;
 
 import java.io.Serializable;
 
@@ -20,7 +20,7 @@ public class ContactGroup implements Serializable {
 	@EmbeddedId
 	private ContactGroupPK contactGroupPK = new ContactGroupPK();
 
-	@Column(name = "IS_ACTIVE")
+	@Column(name = "ISACTIVE")
 	private boolean isActive = true;
 
 	@Column(name = "UNSUBSCRIBED")

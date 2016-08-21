@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.bluespacetech.contactgroup.ContactGroup;
+import com.bluespacetech.contactgroup.entity.ContactGroup;
 import com.bluespacetech.core.model.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,14 +29,14 @@ public class Group extends BaseEntity implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 
-	@Column(name = "COMMENT")
+	@Column(name = "COMMENTS")
 	private String comments;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "contactGroupPK.group", cascade = CascadeType.ALL)
 	private Collection<ContactGroup> contactGroups = new ArrayList<>();
 
-	public String getCommenst() {
+	public String getComments() {
 		return comments;
 	}
 
