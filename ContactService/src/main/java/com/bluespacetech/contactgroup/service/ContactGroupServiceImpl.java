@@ -24,7 +24,7 @@ public class ContactGroupServiceImpl implements ContactGroupService {
 	
 	@Autowired
 	private ContactGroupRepository contactGroupRepository;
-
+	
 	@Override
 	public ContactGroup getContactGroupById(ContactGroupPK contactGroupPK) {
 		return contactGroupRepository.findOne(contactGroupPK);

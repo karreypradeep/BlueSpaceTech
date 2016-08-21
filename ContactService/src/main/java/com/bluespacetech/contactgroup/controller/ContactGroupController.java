@@ -30,7 +30,7 @@ import com.bluespacetech.core.exceptions.BusinessException;
 @RequestMapping("/contactgroups")
 @CrossOrigin
 public class ContactGroupController {
-
+	
 	@Autowired
 	private ContactGroupService contactGroupService;
 	

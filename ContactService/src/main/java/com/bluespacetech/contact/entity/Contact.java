@@ -35,7 +35,6 @@ public class Contact extends BaseEntity implements Serializable {
 	@Column(name = "EMAIL")
 	private String email;
 
-
 	@JsonIgnore
 	@OneToMany(mappedBy = "contactGroupPK.contact", cascade = CascadeType.ALL)
 	private Collection<ContactGroup> contactGroups = new ArrayList<>();
