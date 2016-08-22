@@ -4,8 +4,7 @@
  */
 package com.bluespacetech.contact.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bluespacetech.contact.entity.Contact;
 import com.bluespacetech.contact.service.ContactService;
-import com.bluespacetech.contactgroup.entity.ContactGroup;
 import com.bluespacetech.core.exceptions.BusinessException;
-import com.bluespacetech.group.entity.Group;
 
 /**
  * @author pradeep created date 30-Jan-2015
@@ -36,18 +33,31 @@ public class ContactController {
 
 	@Autowired
 	ContactService contactService;
-
-	/**
-	 * Retrieve All Financial Years.
-	 *
-	 * @return
-	 */
-	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<Contact>> getContacts() {
-		final Collection<Contact> contacts = contactService.findAll();
-		return new ResponseEntity<Collection<Contact>>(contacts, HttpStatus.OK);
+	
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> create(@RequestBody final Contact contact) throws BusinessException {
+		contactService.createContact(contact);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Void> update(@PathVariable final Long id, @RequestBody final Contact contact)
+			throws BusinessException {
 
+		// Get existing Financial Year
+		final Contact currentContact = contactService.getContactById(id);
+		if (currentContact == null) {
+			throw new BusinessException("Supplied Contact does not exist.");
+		}
+		if (!currentContact.getVersion().equals(contact.getVersion())) {
+			throw new BusinessException("Stale Contact. Please update.");
+		}
+
+		contactService.updateContact(contact);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
 	/**
 	 * Retrieve Financial year by Id.
 	 *
@@ -65,43 +75,15 @@ public class ContactController {
 
 	}
 
-	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> create(@RequestBody final Contact contact) throws BusinessException {
-		Collection<Group> groups = contact.getGroups();
-		if (groups != null) {
-			Collection<ContactGroup> contactGroups = new ArrayList<>();
-			for (Group group : groups) {
-				ContactGroup contactGroup = new ContactGroup();
-				contactGroup.setContact(contact);
-				contactGroup.setGroup(group);
-				contactGroup.setActive(true);
-				contactGroup.setUnSubscribed(false);
-				contactGroups.add(contactGroup);
-			}
-			contact.setContactGroups(contactGroups);
-			contactService.createContact(contact);
-			return new ResponseEntity<Void>(HttpStatus.OK);
-		} else {
-			return new ResponseEntity<Void>(HttpStatus.EXPECTATION_FAILED);
-		}
-	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> update(@PathVariable final Long id, @RequestBody final Contact contact)
-			throws BusinessException {
-
-		// Get existing Financial Year
-		final Contact currentContact = contactService.getContactById(id);
-		if (currentContact == null) {
-			throw new BusinessException("Supplied Contact does not exist.");
-		}
-		if (!currentContact.getVersion().equals(contact.getVersion())) {
-			throw new BusinessException("Stale Contact. Please update.");
-		}
-
-		contactService.updateContact(contact);
-		return new ResponseEntity<Void>(HttpStatus.OK);
+	/**
+	 * Retrieve All Financial Years.
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Contact>> getContacts() {
+		final List<Contact> contacts = contactService.findAll();
+		return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
 	}
 
 	@ResponseStatus(HttpStatus.NO_CONTENT)

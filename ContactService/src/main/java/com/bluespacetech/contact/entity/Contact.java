@@ -1,22 +1,24 @@
+/**
+ * This document is a part of the source code and related artifacts for bluespacetech. www.bluespacetech.com
+ * Copyright © 2015 bluespacetech
+ */
 package com.bluespacetech.contact.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.bluespacetech.contactgroup.entity.ContactGroup;
 import com.bluespacetech.core.model.BaseEntity;
-import com.bluespacetech.group.entity.Group;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author pradeep created date 13-Jul-2016
@@ -37,26 +39,14 @@ public class Contact extends BaseEntity implements Serializable {
 	@Column(name = "EMAIL")
 	private String email;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "contactGroupPK.contact", cascade = CascadeType.ALL)
-	private Collection<ContactGroup> contactGroups = new ArrayList<>();
+	@OneToMany(mappedBy = "contactGroupPK.contact", cascade = CascadeType.ALL, orphanRemoval = true, fetch=FetchType.EAGER)
+	private List<ContactGroup> contactGroups = new ArrayList<>();
 	
-	@Transient
-	private Collection<Group> groups = new ArrayList<>(); 
-	
-	public Collection<Group> getGroups() {
-		return groups;
-	}
-
-	public void setGroups(Collection<Group> groups) {
-		this.groups = groups;
-	}
-
-	public Collection<ContactGroup> getContactGroups() {
+	public List<ContactGroup> getContactGroups() {
 		return contactGroups;
 	}
 
-	public void setContactGroups(Collection<ContactGroup> contactGroups) {
+	public void setContactGroups(List<ContactGroup> contactGroups) {
 		this.contactGroups = contactGroups;
 	}
 

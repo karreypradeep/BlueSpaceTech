@@ -33,7 +33,7 @@ public class Group extends BaseEntity implements Serializable {
 	private String comments;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "contactGroupPK.group", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "contactGroupPK.group", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Collection<ContactGroup> contactGroups = new ArrayList<>();
 
 	public String getComments() {

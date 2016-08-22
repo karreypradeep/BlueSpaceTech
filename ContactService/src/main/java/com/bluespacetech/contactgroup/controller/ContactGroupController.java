@@ -4,7 +4,7 @@
  */
 package com.bluespacetech.contactgroup.controller;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bluespacetech.contact.entity.Contact;
+import com.bluespacetech.contact.service.ContactService;
 import com.bluespacetech.contactgroup.entity.ContactGroup;
 import com.bluespacetech.contactgroup.repository.ContactGroupRepositoryCustom;
 import com.bluespacetech.contactgroup.service.ContactGroupService;
@@ -30,6 +32,9 @@ import com.bluespacetech.core.exceptions.BusinessException;
 @RequestMapping("/contactgroups")
 @CrossOrigin
 public class ContactGroupController {
+	
+	@Autowired
+	private ContactService contactService;
 
 	@Autowired
 	private ContactGroupService contactGroupService;
@@ -38,14 +43,15 @@ public class ContactGroupController {
 	private ContactGroupRepositoryCustom contactGroupRepositoryCustom;
 
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Collection<ContactGroup>> getContactGroups() {
-		final Collection<ContactGroup> contactGroups = contactGroupService.findAll();
-		return new ResponseEntity<Collection<ContactGroup>>(contactGroups, HttpStatus.OK);
+	public ResponseEntity<List<ContactGroup>> getContactGroups() {
+		final List<ContactGroup> contactGroups = contactGroupService.findAll();
+		return new ResponseEntity<List<ContactGroup>>(contactGroups, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> update(@RequestBody final ContactGroup contactGroup) throws BusinessException {
-		contactGroupService.updateContactGroup(contactGroup);
+		Contact contact = contactGroup.getContact();
+		contactService.updateContact(contact);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 

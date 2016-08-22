@@ -2,8 +2,8 @@ package com.bluespacetech.contactgroup.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -15,11 +15,11 @@ public class ContactGroupPK implements Serializable {
 
 	private static final long serialVersionUID = 5141112485683480973L;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "CONTACT_ID")
 	private Contact contact;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "GROUP_ID")
 	private Group group;
 
