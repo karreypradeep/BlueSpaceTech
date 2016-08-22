@@ -9,11 +9,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.bluespacetech.contactgroup.entity.ContactGroup;
 import com.bluespacetech.core.model.BaseEntity;
+import com.bluespacetech.group.entity.Group;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -39,6 +41,17 @@ public class Contact extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "contactGroupPK.contact", cascade = CascadeType.ALL)
 	private Collection<ContactGroup> contactGroups = new ArrayList<>();
 	
+	@Transient
+	private Collection<Group> groups = new ArrayList<>(); 
+	
+	public Collection<Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(Collection<Group> groups) {
+		this.groups = groups;
+	}
+
 	public Collection<ContactGroup> getContactGroups() {
 		return contactGroups;
 	}

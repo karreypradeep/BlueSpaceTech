@@ -26,12 +26,6 @@ public class ContactGroup implements Serializable {
 	@Column(name = "UNSUBSCRIBED")
 	private boolean unSubscribed = false;
 	
-	@Transient
-	private Contact contact;
-	
-	@Transient
-	private Group group;
-	
 	public ContactGroupPK getContactGroupPK() {
 		return contactGroupPK;
 	}
@@ -56,6 +50,7 @@ public class ContactGroup implements Serializable {
 		this.unSubscribed = unSubscribed;
 	}
 
+	@Transient
 	public Contact getContact() {
 		return this.getContactGroupPK().getContact();
 	}
@@ -64,6 +59,7 @@ public class ContactGroup implements Serializable {
 		this.getContactGroupPK().setContact(contact);
 	}
 
+	@Transient
 	public Group getGroup() {
 		return this.getContactGroupPK().getGroup();
 	}

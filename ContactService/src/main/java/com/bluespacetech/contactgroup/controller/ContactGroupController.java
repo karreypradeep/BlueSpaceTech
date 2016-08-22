@@ -30,12 +30,12 @@ import com.bluespacetech.core.exceptions.BusinessException;
 @RequestMapping("/contactgroups")
 @CrossOrigin
 public class ContactGroupController {
-	
+
 	@Autowired
 	private ContactGroupService contactGroupService;
-	
+
 	@Autowired
-	private ContactGroupRepositoryCustom contactGroupRepositoryCustom ;
+	private ContactGroupRepositoryCustom contactGroupRepositoryCustom;
 
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Collection<ContactGroup>> getContactGroups() {
@@ -44,16 +44,17 @@ public class ContactGroupController {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> update(@RequestBody final ContactGroup contactGroup)
-			throws BusinessException {
+	public ResponseEntity<Void> update(@RequestBody final ContactGroup contactGroup) throws BusinessException {
 		contactGroupService.updateContactGroup(contactGroup);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
+
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/{contactId}/{groupId}", method = RequestMethod.DELETE)
-	public ResponseEntity<Void> delete(@PathVariable final Long contactId, @PathVariable final Long groupId) throws BusinessException {
-		ContactGroup contactGroup = contactGroupRepositoryCustom.getContactGroupByContactIdAndGroupId(contactId, groupId);
+	public ResponseEntity<Void> delete(@PathVariable final Long contactId, @PathVariable final Long groupId)
+			throws BusinessException {
+		ContactGroup contactGroup = contactGroupRepositoryCustom.getContactGroupByContactIdAndGroupId(contactId,
+				groupId);
 		contactGroupService.deleteContactGroup(contactGroup.getContactGroupPK());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
