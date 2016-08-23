@@ -14,7 +14,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import com.bluespacetech.contactgroup.entity.ContactGroup;
 import com.bluespacetech.core.model.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author pradeep created date 13-Jul-2016
@@ -32,7 +31,6 @@ public class Group extends BaseEntity implements Serializable {
 	@Column(name = "COMMENTS")
 	private String comments;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "contactGroupPK.group", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Collection<ContactGroup> contactGroups = new ArrayList<>();
 

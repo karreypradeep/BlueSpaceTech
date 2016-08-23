@@ -15,11 +15,11 @@ public class ContactGroupPK implements Serializable {
 
 	private static final long serialVersionUID = 5141112485683480973L;
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "CONTACT_ID")
 	private Contact contact;
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "GROUP_ID")
 	private Group group;
 
