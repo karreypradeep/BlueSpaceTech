@@ -34,14 +34,18 @@ public class ContactController {
 
 	@Autowired
 	ContactService contactService;
-	
+
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> create(@RequestBody final Contact contact) throws BusinessException {
+		for (ContactGroup contactGroup : contact.getContactGroups()) {
+			contactGroup.setContact(contact);
+			contactGroup.getGroup().setContactGroups(contact.getContactGroups());
+		}
 		contactService.createContact(contact);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> update(@PathVariable final Long id, @RequestBody final Contact contact)
 			throws BusinessException {
@@ -55,10 +59,15 @@ public class ContactController {
 			throw new BusinessException("Stale Contact. Please update.");
 		}
 
+		for (ContactGroup contactGroup : contact.getContactGroups()) {
+			contactGroup.setContact(contact);
+			contactGroup.getGroup().setContactGroups(contact.getContactGroups());
+		}
+
 		contactService.updateContact(contact);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Retrieve Financial year by Id.
 	 *
@@ -87,7 +96,6 @@ public class ContactController {
 		for (Contact contact : contacts) {
 			for (ContactGroup contactGroup : contact.getContactGroups()) {
 				contactGroup.setContact(null);
-				contactGroup.getGroup().setContactGroups(null);
 			}
 		}
 		return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
