@@ -108,7 +108,26 @@ public class ContactController {
 	 * @return
 	 */
 	@RequestMapping(value = "/searchCriteria", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Contact>> getContactsBySearchCriteria(@RequestBody ContactSearchCriteria contactSearchCriteria) {
+	public ResponseEntity<List<Contact>> getContactsBySearchCriteria(
+			@RequestBody ContactSearchCriteria contactSearchCriteria) {
+		if (contactSearchCriteria.getFirstName() != null) {
+			contactSearchCriteria.setFirstName(contactSearchCriteria.getFirstName().trim());
+			if (contactSearchCriteria.getFirstName().trim().equals("")) {
+				contactSearchCriteria.setFirstName(null);
+			}
+		}
+		if (contactSearchCriteria.getLastName() != null) {
+			contactSearchCriteria.setLastName(contactSearchCriteria.getLastName().trim());
+			if (contactSearchCriteria.getLastName().trim().equals("")) {
+				contactSearchCriteria.setLastName(null);
+			}
+		}
+		if (contactSearchCriteria.getEmail() != null) {
+			contactSearchCriteria.setEmail(contactSearchCriteria.getEmail().trim());
+			if (contactSearchCriteria.getEmail().trim().equals("")) {
+				contactSearchCriteria.setEmail(null);
+			}
+		}
 		final List<Contact> contacts = contactService.findBySearchCriteria(contactSearchCriteria);
 		for (Contact contact : contacts) {
 			for (ContactGroup contactGroup : contact.getContactGroups()) {
