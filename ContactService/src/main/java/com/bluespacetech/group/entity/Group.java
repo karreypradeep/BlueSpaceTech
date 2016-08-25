@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -36,6 +37,17 @@ public class Group extends BaseEntity implements Serializable {
 	@OneToMany(mappedBy = "contactGroupPK.group", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Collection<ContactGroup> contactGroups = new ArrayList<>();
 
+	@Transient
+	private Integer contactCount;
+
+	public Integer getContactCount() {
+		return contactCount;
+	}
+
+	public void setContactCount(Integer contactCount) {
+		this.contactCount = contactCount;
+	}
+
 	public String getComments() {
 		return comments;
 	}
@@ -62,6 +74,6 @@ public class Group extends BaseEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Group [name=" + name + "]";
+		return "Group [name=" + name + ", Comments=" + comments + "]";
 	}
 }

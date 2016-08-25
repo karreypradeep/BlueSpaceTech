@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bluespacetech.contact.entity.Contact;
+import com.bluespacetech.contact.searchcriteria.ContactSearchCriteria;
 import com.bluespacetech.contact.service.ContactService;
 import com.bluespacetech.contactgroup.entity.ContactGroup;
 import com.bluespacetech.core.exceptions.BusinessException;
@@ -93,6 +94,22 @@ public class ContactController {
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Contact>> getContacts() {
 		final List<Contact> contacts = contactService.findAll();
+		for (Contact contact : contacts) {
+			for (ContactGroup contactGroup : contact.getContactGroups()) {
+				contactGroup.setContact(null);
+			}
+		}
+		return new ResponseEntity<List<Contact>>(contacts, HttpStatus.OK);
+	}
+
+	/**
+	 * Retrieve All Financial Years.
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/searchCriteria", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Contact>> getContactsBySearchCriteria(@RequestBody ContactSearchCriteria contactSearchCriteria) {
+		final List<Contact> contacts = contactService.findBySearchCriteria(contactSearchCriteria);
 		for (Contact contact : contacts) {
 			for (ContactGroup contactGroup : contact.getContactGroups()) {
 				contactGroup.setContact(null);

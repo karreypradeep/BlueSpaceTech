@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import com.bluespacetech.contact.entity.Contact;
 import com.bluespacetech.contact.repository.ContactRepository;
+import com.bluespacetech.contact.repository.ContactRepositoryCustom;
+import com.bluespacetech.contact.searchcriteria.ContactSearchCriteria;
 import com.bluespacetech.core.exceptions.BusinessException;
 
 /**
@@ -30,6 +32,9 @@ public class ContactServiceImpl implements ContactService {
 
 	@Autowired
 	private ContactRepository contactRepository;
+	
+	@Autowired
+	private ContactRepositoryCustom contactRepositoryCustom;
 
 	public static void validateContact(final Contact contact) throws BusinessException {
 		if ((contact.getEmail() == null) || (contact.getEmail().trim().length() == 0)) {
@@ -101,6 +106,11 @@ public class ContactServiceImpl implements ContactService {
 	@Override
 	public List<Contact> findAll() {
 		return contactRepository.findAll();
+	}
+
+	@Override
+	public List<Contact> findBySearchCriteria(ContactSearchCriteria contactSearchCriteria) {
+		return contactRepositoryCustom.findContactsBySearchCriteria(contactSearchCriteria);
 	}
 
 }

@@ -3,7 +3,6 @@
  * ContactService.
  * www.bluespacetech.com
  * Copyright © 2016 bluespacetech
- *
  */
 package com.bluespacetech.contact.repository;
 
@@ -15,9 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.bluespacetech.contact.entity.Contact;
 
 /**
- * class for ContactRepository
- *
- * @author pradeep created date 25-June-2015
+ * @author sandeep created date 24-Aug-2016
  */
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {

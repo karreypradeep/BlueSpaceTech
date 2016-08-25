@@ -45,6 +45,9 @@ public class GroupController {
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Group>> getGroups() {
 		final List<Group> groups = groupService.findAll();
+		for (Group group : groups) {
+			group.setContactCount(group.getContactGroups().size());
+		}
 		return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
 	}
 
