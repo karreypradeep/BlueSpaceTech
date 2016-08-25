@@ -103,7 +103,7 @@ public class GroupController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> update(@PathVariable final Long id, @RequestBody final Group groupResource)
+	public ResponseEntity<Void> update(@PathVariable final Long id, @RequestBody final Group group)
 			throws BusinessException {
 
 		// Get existing Financial Year
@@ -111,11 +111,11 @@ public class GroupController {
 		if (currentGroup == null) {
 			throw new BusinessException("Supplied Group does not exist.");
 		}
-		if (!currentGroup.getVersion().equals(groupResource.getVersion())) {
+		if (!currentGroup.getVersion().equals(group.getVersion())) {
 			throw new BusinessException("Stale Group. Please update.");
 		}
 
-		groupService.updateGroup(currentGroup);
+		groupService.updateGroup(group);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 

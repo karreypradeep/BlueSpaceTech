@@ -28,22 +28,44 @@ public class ContactRepositoryCustomImpl implements ContactRepositoryCustom {
 
 	@Override
 	public List<Contact> findContactsBySearchCriteria(ContactSearchCriteria contactSearchCriteria) {
-		StringBuilder queryString = new StringBuilder("select C from Contact C, Group G, ContactGroup CG ");
-		if (contactSearchCriteria != null) {
-			queryString = queryString
-					.append(" where C.id = CG.contactGroupPK.contact.id and G.id = CG.contactGroupPK.group.id ");
-		}
+		StringBuilder queryString = new StringBuilder("select DISTINCT C from Contact C, Group G, ContactGroup CG ");
+		boolean whereClasuseAdded = false;
+		/*
+		 * if (contactSearchCriteria != null) { queryString = queryString
+		 * .append(" where C.id = CG.contactGroupPK.contact.id and G.id = CG.contactGroupPK.group.id "
+		 * ); }
+		 */
 		if (contactSearchCriteria.getFirstName() != null) {
-			queryString = queryString.append(" and C.firstName like :firstName ");
+			if (!whereClasuseAdded) {
+				queryString = queryString.append(" where ");
+			} else {
+				queryString = queryString.append(" and ");
+			}
+			queryString = queryString.append(" C.firstName like :firstName ");
 		}
 		if (contactSearchCriteria.getLastName() != null) {
-			queryString = queryString.append(" and C.lastName like :lastName ");
+			if (!whereClasuseAdded) {
+				queryString = queryString.append(" where ");
+			} else {
+				queryString = queryString.append(" and ");
+			}
+			queryString = queryString.append(" C.lastName like :lastName ");
 		}
 		if (contactSearchCriteria.getEmail() != null) {
-			queryString = queryString.append(" and C.email like :email ");
+			if (!whereClasuseAdded) {
+				queryString = queryString.append(" where ");
+			} else {
+				queryString = queryString.append(" and ");
+			}
+			queryString = queryString.append(" C.email like :email ");
 		}
 		if (contactSearchCriteria.getGroupNames() != null && contactSearchCriteria.getGroupNames().size() > 0) {
-			queryString = queryString.append(" and G.name in :groupNames ");
+			if (!whereClasuseAdded) {
+				queryString = queryString.append(" where ");
+			} else {
+				queryString = queryString.append(" and ");
+			}
+			queryString = queryString.append(" G.name in :groupNames ");
 		}
 		TypedQuery<Contact> query = entityManager.createQuery(queryString.toString(), Contact.class);
 		if (contactSearchCriteria.getFirstName() != null) {
