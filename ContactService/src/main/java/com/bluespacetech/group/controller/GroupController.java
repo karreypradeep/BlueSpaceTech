@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bluespacetech.core.exceptions.BusinessException;
 import com.bluespacetech.group.entity.Group;
+import com.bluespacetech.group.searchcriteria.GroupSearchCriteria;
 import com.bluespacetech.group.service.GroupService;
 
 /**
@@ -45,6 +46,32 @@ public class GroupController {
 	@RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Group>> getGroups() {
 		final List<Group> groups = groupService.findAll();
+		for (Group group : groups) {
+			group.setContactCount(group.getContactGroups().size());
+		}
+		return new ResponseEntity<List<Group>>(groups, HttpStatus.OK);
+	}
+
+	/**
+	 * Retrieve All Financial Years.
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "/searchCriteria", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Group>> getGroupsBySearchCriteria(@RequestBody GroupSearchCriteria groupSearchCriteria) {
+		if (groupSearchCriteria.getName() != null) {
+			groupSearchCriteria.setName(groupSearchCriteria.getName().trim());
+			if (groupSearchCriteria.getName().trim().equals("")) {
+				groupSearchCriteria.setName(null);
+			}
+		}
+		if (groupSearchCriteria.getComments() != null) {
+			groupSearchCriteria.setComments(groupSearchCriteria.getComments().trim());
+			if (groupSearchCriteria.getComments().trim().equals("")) {
+				groupSearchCriteria.setComments(null);
+			}
+		}
+		final List<Group> groups = groupService.findBySearchCriteria(groupSearchCriteria);
 		for (Group group : groups) {
 			group.setContactCount(group.getContactGroups().size());
 		}

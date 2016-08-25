@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import com.bluespacetech.core.exceptions.BusinessException;
 import com.bluespacetech.group.entity.Group;
 import com.bluespacetech.group.repository.GroupRepository;
+import com.bluespacetech.group.repository.GroupRepositoryCustom;
+import com.bluespacetech.group.searchcriteria.GroupSearchCriteria;
 
 
 /**
@@ -28,9 +30,11 @@ import com.bluespacetech.group.repository.GroupRepository;
 //@PreAuthorize("hasAuthority('EXCLUDE_ALL')")
 public class GroupServiceImpl implements GroupService {
 
-
     @Autowired
     private GroupRepository groupRepository;
+    
+    @Autowired
+    private GroupRepositoryCustom groupRepositoryCustom;
 
     public static void validateGroup(final Group group) throws BusinessException {
 	if ((group.getName() == null) || (group.getName().trim().length() == 0)) {
@@ -82,5 +86,10 @@ public class GroupServiceImpl implements GroupService {
     public List<Group> findAll() {
 	return groupRepository.findAll();
     }
+
+	@Override
+	public List<Group> findBySearchCriteria(GroupSearchCriteria groupSearchCriteria) {
+		return groupRepositoryCustom.findGroupsBySearchCriteria(groupSearchCriteria);
+	}
 
 }

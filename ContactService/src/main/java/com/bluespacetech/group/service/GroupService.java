@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.bluespacetech.core.exceptions.BusinessException;
 import com.bluespacetech.group.entity.Group;
+import com.bluespacetech.group.searchcriteria.GroupSearchCriteria;
 
 /**
  * class for GroupService
@@ -30,4 +31,6 @@ public interface GroupService {
 	Group getGroupById(final Long groupId);
 
 	Group updateGroup(final Group group) throws BusinessException;
+	
+	List<Group> findBySearchCriteria(final GroupSearchCriteria groupSearchCriteria);
 }
